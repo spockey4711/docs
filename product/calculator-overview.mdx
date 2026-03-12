@@ -9,15 +9,40 @@ Fueling Optimizer supports one endurance session at a time.
 
 The user enters session context, receives a deterministic recommendation, and can immediately apply that recommendation in training.
 
+The active calculation API currently supports:
+
+- `bike`
+- `running`
+
+Supported race contexts:
+
+- `half_marathon`
+- `olympic_triathlon`
+- `ironman`
+
 ## Inputs
 
-The current calculator is designed around a compact set of operational inputs:
+The current calculator is designed around a compact set of operational inputs.
 
-- body weight
-- session duration
-- session intensity
-- sport type
-- environmental or practical constraints when relevant
+Required request fields:
+
+- `weight_kg`
+- `duration_hours`
+- `intensity`
+
+Optional request fields:
+
+- `time_to_start_minutes`
+- `sport_type`
+- `session_type`
+- `race_type`
+- `gi_sensitivity`
+- `gut_training_level`
+- `max_carbs_per_hour`
+- `sweat_rate_ml_per_hour`
+- `carb_source_type`
+- `heat`
+- `fuel_format_access`
 
 These inputs are chosen because they materially affect fueling needs without turning the product into a full coaching platform.
 
@@ -34,6 +59,14 @@ Recommendations are expressed in concrete units:
 - carbohydrates in `g`
 - fluids in `ml`
 - sodium or related electrolyte guidance in `mg`
+
+The response also includes:
+
+- `logic_version`
+- during-session summary totals
+- phase objects such as `before_ride_nutrition`
+- top-level `warnings`
+- top-level `rationale`
 
 ## UX principle
 

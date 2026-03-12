@@ -1,6 +1,6 @@
 ---
 title: 'Introduction'
-description: 'HTTP endpoints for auth and session fueling calculations'
+description: 'HTTP endpoints for calculation, auth, plans, and billing'
 ---
 
 ## Overview
@@ -13,26 +13,38 @@ description: 'HTTP endpoints for auth and session fueling calculations'
   View the specification used for the interactive API docs.
 </Card>
 
+## Route inventory
+
+The public HTTP surface currently includes:
+
+- `POST /calculate`
+- `GET /calculations/recent`
+- `POST /auth/register`
+- `POST /auth/login`
+- `POST /auth/logout`
+- `POST /plans`
+- `GET /plans`
+- `GET /billing/status`
+- `GET /billing/invoices`
+
 ## Authentication
 
-Protected endpoints use Bearer token authentication.
+Most product auth is session-based rather than bearer-token-based.
 
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
-```
+That means:
+
+- login creates an `HttpOnly` session cookie
+- logout clears the session
+- form-based state-changing actions use CSRF protection
 
 ## Core flows
-
-The current reference focuses on three key backend flows:
 
 - user registration
 - user login
 - single-session fueling calculation
+- saved plans
+- billing self-service metadata and invoice history
 
 ## Notes
 
-The API should match the product boundary described in the product docs. Keep endpoints aligned with a narrow, deterministic calculator rather than broad coaching or wellness functionality.
+The app mixes JSON APIs and HTML or SPA shell routes. This reference focuses on the API-shaped routes, not the marketing or shell pages.

@@ -1,0 +1,37 @@
+---
+title: "Error handling"
+description: "Validation errors and operational warning codes"
+---
+
+## Validation errors
+
+Invalid calculation requests return `422`.
+
+Stable shape:
+
+```json
+{
+  "code": "validation_error",
+  "message": "Invalid request payload.",
+  "details": []
+}
+```
+
+## Warning codes
+
+The calculation response can also include non-fatal warnings.
+
+Current warning codes:
+
+- `TOLERANCE_CAP_APPLIED`
+- `MULTIPLE_CARBS_REQUIRED`
+- `HYDRATION_TRADEOFF`
+
+Warnings are returned as structured objects with:
+
+- `code`
+- `message`
+
+## Important distinction
+
+Warnings do not indicate that the request failed. They indicate that the deterministic logic had to apply a constraint, cap, or tradeoff while still producing a valid recommendation.

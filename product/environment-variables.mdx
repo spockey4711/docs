@@ -1,0 +1,58 @@
+---
+title: "Environment variables"
+description: "Runtime configuration for logic, auth, analytics, billing, and email"
+---
+
+## Core runtime
+
+```bash
+DATABASE_URL=
+LOGIC_VERSION=fueling-logic-v1
+FUELING_LOGIC_MODE=matrix_v1
+FUELING_LOGIC_SHADOW_COMPARE=false
+APP_BASE_URL=http://localhost:8000
+```
+
+## Session and auth
+
+```bash
+SESSION_COOKIE_NAME=session
+CSRF_COOKIE_NAME=csrf_token
+CSRF_FORM_FIELD_NAME=csrf_token
+AUTH_RATE_LIMIT_IP_ATTEMPTS=10
+AUTH_RATE_LIMIT_EMAIL_ATTEMPTS=5
+AUTH_RATE_LIMIT_WINDOW_MINUTES=10
+AUTH_SESSION_TTL_HOURS=168
+SESSION_COOKIE_SECURE=false
+SESSION_COOKIE_SAMESITE=lax
+EMAIL_CONFIRMATION_SECRET=
+EMAIL_CONFIRMATION_TTL_HOURS=24
+```
+
+## Analytics
+
+```bash
+POSTHOG_API_KEY=
+POSTHOG_API_HOST=https://eu.i.posthog.com
+POSTHOG_PUBLIC_API_HOST=https://b.yannikwuenker.de
+POSTHOG_UI_HOST=https://eu.posthog.com
+POSTHOG_DEFAULTS=2026-01-30
+```
+
+## Billing and email
+
+```bash
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+STRIPE_PRICE_ID_PRO_MONTHLY=
+STRIPE_PRICE_ID_PRO_ANNUAL=
+RESEND_API_KEY=
+RESEND_FROM_EMAIL=onboarding@resend.dev
+```
+
+## Notes
+
+- Without `DATABASE_URL`, calculation still works but persistence-backed features do not.
+- Auth flows require DB persistence.
+- Billing self-service requires DB state and Stripe configuration.
+- PostHog is disabled when no API key is configured.

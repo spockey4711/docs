@@ -1,0 +1,40 @@
+---
+title: "Free vs Pro"
+description: "Entitlements, server-side gating, and feature visibility"
+---
+
+## Free
+
+Free users can:
+
+- use `POST /calculate`
+
+Free users cannot:
+
+- save presets
+- save plans
+- access request history
+- auto-apply saved profile defaults on calculate
+- access the PDF export flow
+- see pre-session or post-session response blocks
+- see full `what_to_fuel` details
+- see `product_options`
+- see the full explainability payload
+
+## Pro
+
+Pro users can:
+
+- save presets in `/settings`
+- save plans through `POST /plans`
+- list saved plans with `GET /plans`
+- use auto-applied profile defaults on calculate
+- access billing management
+- use the PDF export flow via `/calculate/export`
+- see full explainability, pre/post phases, `what_to_fuel`, and `product_options`
+
+## Important behavior
+
+Entitlement gating is enforced on the server.
+
+That means Free users do not merely hide data in the UI. The backend removes gated blocks from the returned JSON payload before the response is sent.

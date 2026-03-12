@@ -1,0 +1,45 @@
+---
+title: "Settings and presets"
+description: "Saved defaults, plans, and recent calculation history"
+---
+
+## Saved presets
+
+Route: `POST /settings`
+
+Current preset fields include:
+
+- `default_weight_kg`
+- `default_duration_hours`
+- `default_time_to_start_minutes`
+- `default_intensity`
+- `default_sport_type`
+- `default_session_type`
+- `ui_language`
+- `gi_sensitivity_default`
+- `gut_training_level_default`
+- `max_carbs_per_hour`
+- `sweat_rate_ml_per_hour`
+
+Access is Pro only.
+
+## Saved plans
+
+- `POST /plans` saves a plan with `plan_name` and a full `calculation` object
+- `GET /plans` returns saved plan summaries
+
+Access is authenticated Pro only.
+
+## Recent calculations
+
+`GET /calculations/recent` returns persisted calculation snapshots when persistence is configured.
+
+Summary fields include:
+
+- `request_id`
+- `created_at`
+- `sport_type`
+- `intensity`
+- `duration_minutes`
+- `logic_version`
+- carb, fluid, and sodium totals

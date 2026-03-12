@@ -1,0 +1,43 @@
+---
+title: "Authentication"
+description: "Session cookies, CSRF rules, and email confirmation"
+---
+
+## Auth model
+
+Authentication is session-based.
+
+- Session cookie name defaults to `session`
+- CSRF cookie name defaults to `csrf_token`
+- CSRF form field name defaults to `csrf_token`
+
+Login sets an `HttpOnly` session cookie. Logout clears the session cookie.
+
+## CSRF behavior
+
+Double-submit CSRF validation applies to form-encoded state-changing requests.
+
+JSON API requests are not CSRF-checked by the current helper.
+
+This is relevant for:
+
+- `POST /auth/register`
+- `POST /auth/login`
+- `POST /auth/logout`
+- billing form actions
+- settings form actions
+
+## Route enforcement
+
+- `get_current_user` requires a valid session cookie and active DB-backed session
+- `require_pro_user` additionally checks resolved entitlements
+
+## Email confirmation
+
+New users are created as unverified.
+
+Registration sends a signed confirmation link to `/auth/confirm`. Login is blocked until confirmation succeeds.
+
+Successful confirmation redirects to:
+
+`/auth/login?registered=1&confirmed=1`

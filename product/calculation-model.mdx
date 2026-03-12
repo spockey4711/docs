@@ -1,6 +1,6 @@
 ---
 title: "Calculation model"
-description: "How deterministic fueling recommendations are structured"
+description: "Request model, response model, and concrete output structure"
 ---
 
 ## Design principle
@@ -9,25 +9,74 @@ Fueling Optimizer uses rule-based logic.
 
 That means the same valid input set should always produce the same output set. This makes the product easier to test, easier to explain, and easier for athletes to trust.
 
+## Request model
+
+Required fields:
+
+- `weight_kg`: `40 <= value <= 140`
+- `duration_hours`: `0.5 <= value <= 8.0`
+- `intensity`: `easy`, `moderate`, `hard`
+
+Optional fields:
+
+- `time_to_start_minutes`: `0 <= value <= 480`
+- `sport_type`: `bike`, `running`
+- `session_type`: `training`, `competition`
+- `race_type`: `half_marathon`, `olympic_triathlon`, `ironman`
+- `gi_sensitivity`: `low`, `medium`, `high`
+- `gut_training_level`: `none`, `some`, `advanced`
+- `max_carbs_per_hour`: `20 <= value <= 120`
+- `sweat_rate_ml_per_hour`: `300 <= value <= 2000`
+- `carb_source_type`: `single`, `multiple`
+- `heat`: `normal`, `warm`, `hot`
+- `fuel_format_access`: `drink_only`, `drink_and_gels`, `all_formats`
+
+Unknown request fields are rejected with `422`.
+
+## Response model
+
+Top-level output includes:
+
+- `logic_version`
+- `phase`
+- `target_carbs_per_hour`
+- `duration_minutes`
+- `items`
+- carb, fluid, and sodium totals plus per-hour values
+- `recovery`
+- `before_ride_nutrition`
+- `during_ride_nutrition`
+- `after_ride_nutrition`
+- `race_schedule`
+- `warnings`
+- `rationale`
+
+Phase objects include:
+
+- `title`
+- `timing`
+- `carbs_g`
+- `fluid_ml`
+- `sodium_mg`
+- `protein_g`
+- `what_to_fuel`
+- `product_options`
+- `rationale`
+
+Warning objects include:
+
+- `code`
+- `message`
+
 ## Phase-based structure
 
-Recommendations are grouped into three phases:
+Recommendations are grouped into:
 
-1. Before the session
-2. During the session
-3. After the session
+1. `before_ride_nutrition`
+2. `during_ride_nutrition`
+3. `after_ride_nutrition`
 
-Each phase can contain carbohydrate, fluid, and sodium targets depending on the session context.
-
-## Decision inputs
-
-The rules are driven by the minimum set of variables that materially change fueling demands:
-
-- athlete body mass
-- duration of the session
-- intensity of the session
-- sport type
-- declared constraints
+The route still uses `ride` terminology inside response fields even though the product supports both bike and running.
 
 ## Why deterministic rules
 

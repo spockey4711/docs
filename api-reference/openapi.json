@@ -2,23 +2,413 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Fueling Optimizer API",
-    "description": "Example API for deterministic single-session fueling recommendations.",
+    "description": "Public API reference for deterministic fueling calculations, account flows, plans, and billing metadata.",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "https://api.fuelingoptimizer.app"
+      "url": "http://localhost:8000"
     }
   ],
   "components": {
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      }
-    },
     "schemas": {
+      "ValidationError": {
+        "type": "object",
+        "required": [
+          "code",
+          "message",
+          "details"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "validation_error"
+          },
+          "message": {
+            "type": "string",
+            "example": "Invalid request payload."
+          },
+          "details": {
+            "type": "array",
+            "items": {}
+          }
+        }
+      },
+      "Warning": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "FuelChoice": {
+        "type": "object",
+        "required": [
+          "name",
+          "amount",
+          "fuel_form"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "fuel_form": {
+            "type": "string"
+          }
+        }
+      },
+      "FuelingPhase": {
+        "type": "object",
+        "required": [
+          "title",
+          "timing",
+          "carbs_g",
+          "fluid_ml",
+          "sodium_mg",
+          "rationale"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "timing": {
+            "type": "string"
+          },
+          "carbs_g": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "fluid_ml": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "sodium_mg": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "protein_g": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "what_to_fuel": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/FuelChoice"
+            }
+          },
+          "product_options": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object"
+            }
+          },
+          "rationale": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "FuelItem": {
+        "type": "object",
+        "required": [
+          "fuel_item_id",
+          "quantity",
+          "carbs_total_g",
+          "time_offset_min",
+          "phase"
+        ],
+        "properties": {
+          "fuel_item_id": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "carbs_total_g": {
+            "type": "number"
+          },
+          "time_offset_min": {
+            "type": "integer"
+          },
+          "phase": {
+            "type": "string"
+          }
+        }
+      },
+      "Recovery": {
+        "type": "object",
+        "required": [
+          "carbs_g",
+          "protein_g"
+        ],
+        "properties": {
+          "carbs_g": {
+            "type": "number"
+          },
+          "protein_g": {
+            "type": "number"
+          }
+        }
+      },
+      "CalculationRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "weight_kg",
+          "duration_hours",
+          "intensity"
+        ],
+        "properties": {
+          "weight_kg": {
+            "type": "number",
+            "minimum": 40,
+            "maximum": 140
+          },
+          "duration_hours": {
+            "type": "number",
+            "minimum": 0.5,
+            "maximum": 8
+          },
+          "time_to_start_minutes": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 480,
+            "default": 90
+          },
+          "intensity": {
+            "type": "string",
+            "enum": [
+              "easy",
+              "moderate",
+              "hard"
+            ]
+          },
+          "sport_type": {
+            "type": "string",
+            "enum": [
+              "bike",
+              "running"
+            ],
+            "default": "bike"
+          },
+          "session_type": {
+            "type": "string",
+            "enum": [
+              "training",
+              "competition"
+            ],
+            "default": "training"
+          },
+          "race_type": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "half_marathon",
+              "olympic_triathlon",
+              "ironman",
+              null
+            ]
+          },
+          "gi_sensitivity": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "default": "medium"
+          },
+          "gut_training_level": {
+            "type": "string",
+            "enum": [
+              "none",
+              "some",
+              "advanced"
+            ],
+            "default": "some"
+          },
+          "max_carbs_per_hour": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 20,
+            "maximum": 120
+          },
+          "sweat_rate_ml_per_hour": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 300,
+            "maximum": 2000
+          },
+          "carb_source_type": {
+            "type": "string",
+            "enum": [
+              "single",
+              "multiple"
+            ],
+            "default": "multiple"
+          },
+          "heat": {
+            "type": "string",
+            "enum": [
+              "normal",
+              "warm",
+              "hot"
+            ],
+            "default": "normal"
+          },
+          "fuel_format_access": {
+            "type": "string",
+            "enum": [
+              "drink_only",
+              "drink_and_gels",
+              "all_formats"
+            ],
+            "default": "all_formats"
+          }
+        }
+      },
+      "CalculationResponse": {
+        "type": "object",
+        "required": [
+          "logic_version",
+          "phase",
+          "target_carbs_per_hour",
+          "duration_minutes",
+          "items",
+          "carbs_per_hour_g",
+          "total_carbs_g",
+          "fluid_ml_per_hour",
+          "total_fluid_ml",
+          "sodium_mg_per_hour",
+          "total_sodium_mg",
+          "recovery",
+          "during_ride_nutrition",
+          "warnings",
+          "rationale"
+        ],
+        "properties": {
+          "logic_version": {
+            "type": "string"
+          },
+          "phase": {
+            "type": "string",
+            "example": "during"
+          },
+          "target_carbs_per_hour": {
+            "type": "integer"
+          },
+          "duration_minutes": {
+            "type": "integer"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FuelItem"
+            }
+          },
+          "carbs_per_hour_g": {
+            "type": "integer"
+          },
+          "total_carbs_g": {
+            "type": "integer"
+          },
+          "fluid_ml_per_hour": {
+            "type": "integer"
+          },
+          "total_fluid_ml": {
+            "type": "integer"
+          },
+          "sodium_mg_per_hour": {
+            "type": "integer"
+          },
+          "total_sodium_mg": {
+            "type": "integer"
+          },
+          "recovery": {
+            "$ref": "#/components/schemas/Recovery"
+          },
+          "before_ride_nutrition": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FuelingPhase"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "during_ride_nutrition": {
+            "$ref": "#/components/schemas/FuelingPhase"
+          },
+          "after_ride_nutrition": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FuelingPhase"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "race_schedule": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Warning"
+            }
+          },
+          "rationale": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "RegisterRequest": {
         "type": "object",
         "required": [
@@ -31,8 +421,7 @@
             "format": "email"
           },
           "password": {
-            "type": "string",
-            "minLength": 8
+            "type": "string"
           }
         }
       },
@@ -52,126 +441,222 @@
           }
         }
       },
-      "AuthResponse": {
+      "AuthFlowResponse": {
         "type": "object",
-        "required": [
-          "userId",
-          "accessToken"
-        ],
         "properties": {
-          "userId": {
-            "type": "string",
-            "format": "uuid"
+          "ok": {
+            "type": "boolean"
           },
-          "accessToken": {
-            "type": "string"
-          }
-        }
-      },
-      "SessionFuelingRequest": {
-        "type": "object",
-        "required": [
-          "sport",
-          "durationMinutes",
-          "intensity",
-          "weightKg"
-        ],
-        "properties": {
-          "sport": {
-            "type": "string",
-            "enum": [
-              "running",
-              "cycling",
-              "triathlon",
-              "other"
-            ]
-          },
-          "durationMinutes": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "intensity": {
-            "type": "string",
-            "enum": [
-              "easy",
-              "moderate",
-              "hard",
-              "race_simulation"
-            ]
-          },
-          "weightKg": {
-            "type": "number",
-            "minimum": 20
-          },
-          "constraints": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "FuelingTarget": {
-        "type": "object",
-        "required": [
-          "carbsGrams",
-          "fluidsMl",
-          "sodiumMg"
-        ],
-        "properties": {
-          "carbsGrams": {
-            "type": "number"
-          },
-          "fluidsMl": {
-            "type": "number"
-          },
-          "sodiumMg": {
-            "type": "number"
-          },
-          "notes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "SessionFuelingResponse": {
-        "type": "object",
-        "required": [
-          "before",
-          "during",
-          "after"
-        ],
-        "properties": {
-          "before": {
-            "$ref": "#/components/schemas/FuelingTarget"
-          },
-          "during": {
-            "$ref": "#/components/schemas/FuelingTarget"
-          },
-          "after": {
-            "$ref": "#/components/schemas/FuelingTarget"
-          }
-        }
-      },
-      "Error": {
-        "type": "object",
-        "required": [
-          "message"
-        ],
-        "properties": {
           "message": {
             "type": "string"
+          }
+        }
+      },
+      "PlanRequest": {
+        "type": "object",
+        "required": [
+          "plan_name",
+          "calculation"
+        ],
+        "properties": {
+          "plan_name": {
+            "type": "string"
+          },
+          "calculation": {
+            "$ref": "#/components/schemas/CalculationRequest"
+          }
+        }
+      },
+      "PlanSummary": {
+        "type": "object",
+        "properties": {
+          "plan_id": {
+            "type": "string"
+          },
+          "plan_name": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "RecentCalculation": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sport_type": {
+            "type": "string"
+          },
+          "intensity": {
+            "type": "string"
+          },
+          "duration_minutes": {
+            "type": "integer"
+          },
+          "logic_version": {
+            "type": "string"
+          },
+          "total_carbs_g": {
+            "type": "integer"
+          },
+          "total_fluid_ml": {
+            "type": "integer"
+          },
+          "total_sodium_mg": {
+            "type": "integer"
+          }
+        }
+      },
+      "BillingStatus": {
+        "type": "object",
+        "properties": {
+          "plan_tier": {
+            "type": "string"
+          },
+          "billing_status": {
+            "type": "string",
+            "enum": [
+              "free",
+              "trialing",
+              "active",
+              "canceling",
+              "past_due",
+              "unpaid",
+              "canceled"
+            ]
+          },
+          "billing_interval": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "current_period_end": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "cancel_at_period_end": {
+            "type": "boolean"
+          },
+          "pro_access_until": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "price_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "BillingInvoice": {
+        "type": "object",
+        "properties": {
+          "invoice_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "amount_cents": {
+            "type": "integer"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "hosted_invoice_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdf_url": {
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       }
     }
   },
   "paths": {
+    "/calculate": {
+      "post": {
+        "summary": "Calculate deterministic fueling guidance for one session",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CalculationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Calculation completed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CalculationResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calculations/recent": {
+      "get": {
+        "summary": "List recent calculations",
+        "responses": {
+          "200": {
+            "description": "Recent calculations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RecentCalculation"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/register": {
       "post": {
-        "summary": "Register a new user",
+        "summary": "Register a new user and send confirmation email",
         "requestBody": {
           "required": true,
           "content": {
@@ -183,22 +668,12 @@
           }
         },
         "responses": {
-          "201": {
-            "description": "User created",
+          "200": {
+            "description": "Registration accepted",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AuthResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/AuthFlowResponse"
                 }
               }
             }
@@ -208,7 +683,7 @@
     },
     "/auth/login": {
       "post": {
-        "summary": "Authenticate an existing user",
+        "summary": "Authenticate a user and create a session",
         "requestBody": {
           "required": true,
           "content": {
@@ -225,17 +700,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AuthResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Invalid credentials",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/AuthFlowResponse"
                 }
               }
             }
@@ -243,41 +708,98 @@
         }
       }
     },
-    "/calculations/session-fueling": {
+    "/auth/logout": {
       "post": {
-        "summary": "Calculate deterministic fueling guidance for one session",
-        "security": [
-          {
-            "bearerAuth": []
+        "summary": "Logout the current user and clear the session cookie",
+        "responses": {
+          "200": {
+            "description": "Logout successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthFlowResponse"
+                }
+              }
+            }
           }
-        ],
+        }
+      }
+    },
+    "/plans": {
+      "get": {
+        "summary": "List saved plans",
+        "responses": {
+          "200": {
+            "description": "Plan summaries",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlanSummary"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a saved plan",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SessionFuelingRequest"
+                "$ref": "#/components/schemas/PlanRequest"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Fueling calculation completed",
+            "description": "Plan saved",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SessionFuelingResponse"
+                  "$ref": "#/components/schemas/PlanSummary"
                 }
               }
             }
-          },
-          "400": {
-            "description": "Invalid calculation input",
+          }
+        }
+      }
+    },
+    "/billing/status": {
+      "get": {
+        "summary": "Get billing status for the current user",
+        "responses": {
+          "200": {
+            "description": "Billing status",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/BillingStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/billing/invoices": {
+      "get": {
+        "summary": "List billing invoices for the current user",
+        "responses": {
+          "200": {
+            "description": "Billing invoices",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BillingInvoice"
+                  }
                 }
               }
             }

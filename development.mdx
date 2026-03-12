@@ -36,6 +36,33 @@ A local preview of your documentation will be available at `http://localhost:300
 
 This documentation lives in its own Git repository. The docs are related to Fueling Optimizer, but they are versioned separately from the application repository.
 
+## Application run flow
+
+The product itself currently runs from the main application repository, not from this docs repository.
+
+Reference local app flow:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.lock.txt
+npm install
+npm run build:emails
+npm run build
+uvicorn app.main:app --reload
+```
+
+## Tests
+
+Reference test flow:
+
+```bash
+source .venv/bin/activate
+python -m pytest
+npm run test:e2e
+```
+
 ## Custom ports
 
 By default, Mintlify uses port 3000. You can customize the port Mintlify runs on by using the `--port` flag. For example, to run Mintlify on port 3333, use this command:

@@ -1,0 +1,80 @@
+---
+title: "How it works"
+description: "Deterministic logic modes, calculation steps, and warning behavior"
+---
+
+## Logic model
+
+Fueling Optimizer is rule-based.
+
+Identical validated input should produce identical output. The business logic lives in services and constants, not in learned models.
+
+## Logic modes
+
+The runtime supports two logic modes:
+
+- `matrix_v1`
+- `legacy_v0`
+
+Current output versions:
+
+- `matrix_v1` returns `logic_version: "1.0"`
+- `legacy_v0` returns `logic_version: "0.9-legacy"`
+
+## Shadow compare mode
+
+When `FUELING_LOGIC_SHADOW_COMPARE=true`, the inactive mode is calculated in parallel for logging only.
+
+It does not change the user-facing API response.
+
+## Carb target flow in `matrix_v1`
+
+1. Start with a duration bucket baseline.
+2. Add an intensity modifier.
+3. Add a sport modifier.
+4. Add a heat modifier.
+5. Apply the session-type factor.
+6. Apply GI sensitivity and gut-training caps.
+7. Apply the user `max_carbs_per_hour` cap if it is lower.
+8. If `carb_source_type=single` and the target exceeds `60 g/h`, reduce to `60 g/h` and emit a warning.
+9. Round to practical `5 g/h` steps.
+10. If `hot + drink_only + target > 70 g/h`, emit a hydration tradeoff warning.
+
+## Hydration logic
+
+- Hydration starts from intensity-based fluid and sodium targets.
+- Sport and session multipliers modify fluid and sodium.
+- Sessions longer than `3h` increase fluid and sodium.
+- `sweat_rate_ml_per_hour` overrides the calculated fluid target.
+- Fluid is capped at `1200 ml/h`.
+
+## Phase generation
+
+- Before phase: carbs scale from body weight and fluid scales by intensity, sport, and lead-in time.
+- During phase: totals derive from per-hour targets multiplied by session duration.
+- After phase: recovery carbs and protein scale from body weight and post-session fluid is `25%` of session fluid.
+
+## Deterministic fuel mapping
+
+Current item catalog:
+
+- `drink_500ml`
+- `gel_standard`
+- `bar_standard`
+- `banana_medium`
+- `water`
+
+Current carb constants:
+
+- drink: `30 g` per `500 ml`
+- gel: `25 g`
+- bar: `40 g`
+- banana: `25 g`
+
+## Warning codes
+
+The active warning codes are:
+
+- `TOLERANCE_CAP_APPLIED`
+- `MULTIPLE_CARBS_REQUIRED`
+- `HYDRATION_TRADEOFF`

@@ -1,0 +1,24 @@
+---
+title: "Logic versions"
+description: "Version labels and compatibility notes for fueling logic"
+---
+
+## Active modes
+
+Fueling logic currently supports:
+
+- `matrix_v1`
+- `legacy_v0`
+
+## Output versions
+
+- `matrix_v1` maps to `logic_version: "1.0"`
+- `legacy_v0` maps to `logic_version: "0.9-legacy"`
+
+## Compatibility note
+
+The API also exposes a stable compatibility field named `phase`, which currently remains `during`.
+
+## Documentation caveat
+
+Some route and response names still use `ride` terminology even though the product supports both bike and running. Keep that mismatch explicit in the docs until the API naming is cleaned up in code.

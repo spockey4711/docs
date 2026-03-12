@@ -7,13 +7,15 @@ description: "Scope, audience, and positioning for Fueling Optimizer"
 
 Fueling Optimizer gives endurance athletes precise fueling guidance for one training session.
 
-The user provides a small set of inputs:
+The user provides validated session inputs:
 
 - body weight
 - session duration
 - session intensity
 - sport type
-- practical constraints such as carbohydrate tolerance or execution preferences
+- race or training context
+- GI sensitivity and gut training level
+- format constraints such as `drink_only` or `all_formats`
 
 The system returns concrete targets across the full session timeline:
 
@@ -29,6 +31,8 @@ The primary audience is ambitious endurance athletes who want precise and explai
 
 This includes athletes training for long rides, long runs, bricks, race simulations, or structured sessions where fueling has a direct performance impact.
 
+The currently supported sports in the active calculation API are `bike` and `running`.
+
 ## Positioning
 
 Fueling Optimizer is a sports science calculator.
@@ -39,6 +43,23 @@ It is not positioned as:
 - a recovery therapy product
 - a long-term training planner
 - an adaptive system that silently changes recommendations based on hidden logic
+
+## In scope
+
+- single-session fueling recommendations
+- practical pre, during, and post-session targets
+- user accounts and saved preferences
+- Pro billing and entitlement gating
+- PDF-export-oriented plan presentation
+
+## Explicitly out of scope
+
+- AI recommendations
+- machine learning personalization
+- long-term planning
+- coaching advice
+- medical diagnosis
+- wearable integrations
 
 ## Brand direction
 

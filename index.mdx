@@ -3,9 +3,9 @@ title: "Fueling Optimizer"
 description: "Deterministic fueling guidance for one endurance session"
 ---
 
-Fueling Optimizer helps ambitious endurance athletes turn session inputs into concrete fueling targets in `g`, `ml`, and `mg`.
+Fueling Optimizer helps endurance athletes turn validated session inputs into concrete fueling targets in `g`, `ml`, and `mg`.
 
-It is intentionally narrow. The product covers one training session at a time and focuses on practical, explainable recommendations before, during, and after the session.
+It is intentionally narrow. The product covers one session at a time and focuses on practical, explainable recommendations before, during, and after training or race-specific efforts.
 
 <Card
   title="Read the product snapshot"
@@ -18,7 +18,7 @@ It is intentionally narrow. The product covers one training session at a time an
 
 ## What the calculator does
 
-The calculator takes a constrained set of inputs and returns structured guidance you can execute during a real session.
+The active calculation flow accepts real request fields from the backend API and returns deterministic plan data you can execute in a real session.
 
 <Columns cols={2}>
   <Card
@@ -26,28 +26,28 @@ The calculator takes a constrained set of inputs and returns structured guidance
     icon="sliders"
     href="/product/calculator-overview"
   >
-    Weight, duration, intensity, sport type, and practical constraints.
+    Weight, duration, intensity, sport type, GI tolerance, heat, and fuel access.
   </Card>
   <Card
-    title="Calculation model"
+    title="How it works"
     icon="function"
-    href="/product/calculation-model"
+    href="/product/how-it-works"
   >
-    Rule-based logic with transparent phase-by-phase outputs.
+    Rule-based logic, logic modes, warnings, and phase generation.
   </Card>
   <Card
-    title="Guardrails"
-    icon="shield-check"
-    href="/product/guardrails"
+    title="Free vs Pro"
+    icon="badge-check"
+    href="/product/free-vs-pro"
   >
-    Clear scope boundaries so the product stays precise and trustworthy.
+    Server-side entitlement gating for outputs, presets, plans, and exports.
   </Card>
   <Card
     title="API reference"
     icon="wave-pulse"
     href="/api-reference/introduction"
   >
-    Registration, login, and session fueling calculation endpoints.
+    Auth, calculate, plans, and billing endpoints based on the live route inventory.
   </Card>
 </Columns>
 
@@ -58,6 +58,19 @@ Fueling Optimizer is positioned as sports science software, not an AI coach.
 <Note>
   Recommendations are deterministic, transparent, and intentionally free of black-box adaptation.
 </Note>
+
+## Current scope
+
+The active product currently supports:
+
+- single-session fueling recommendations
+- pre, during, and post-session outputs
+- practical food and drink mapping
+- user accounts and saved preferences
+- Pro billing and entitlements
+- PDF-export-oriented presentation flows
+
+The active sports in the calculation API are `bike` and `running`.
 
 ## Instrumentation
 

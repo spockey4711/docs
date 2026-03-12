@@ -18,20 +18,27 @@
             "pages": [
               "index",
               "quickstart",
-              "product/calculator-overview"
+              "product/how-it-works"
             ]
           },
           {
-            "group": "Methodology",
+            "group": "Product model",
             "pages": [
+              "product/calculator-overview",
               "product/calculation-model",
               "product/guardrails",
+              "product/free-vs-pro",
               "product/analytics"
             ]
           },
           {
             "group": "Platform",
             "pages": [
+              "product/authentication",
+              "product/settings-and-presets",
+              "product/environment-variables",
+              "product/error-handling",
+              "product/logic-versions",
               "development"
             ]
           }
@@ -47,11 +54,32 @@
             ]
           },
           {
-            "group": "Endpoint patterns",
+            "group": "Calculations",
+            "pages": [
+              "api-reference/endpoint/calculate",
+              "api-reference/endpoint/recent"
+            ]
+          },
+          {
+            "group": "Authentication",
             "pages": [
               "api-reference/endpoint/register",
               "api-reference/endpoint/login",
-              "api-reference/endpoint/calculate"
+              "api-reference/endpoint/logout"
+            ]
+          },
+          {
+            "group": "Plans",
+            "pages": [
+              "api-reference/endpoint/create-plan",
+              "api-reference/endpoint/list-plans"
+            ]
+          },
+          {
+            "group": "Billing",
+            "pages": [
+              "api-reference/endpoint/billing-status",
+              "api-reference/endpoint/billing-invoices"
             ]
           }
         ]
@@ -81,8 +109,8 @@
   "navbar": {
     "links": [
       {
-        "label": "Methodology",
-        "href": "/product/calculation-model"
+        "label": "How it works",
+        "href": "/product/how-it-works"
       },
       {
         "label": "API reference",
@@ -91,8 +119,8 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Calculator docs",
-      "href": "/product/calculator-overview"
+      "label": "Calculate API",
+      "href": "/api-reference/endpoint/calculate"
     }
   },
   "contextual": {
