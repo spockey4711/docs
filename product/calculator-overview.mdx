@@ -1,0 +1,48 @@
+---
+title: "Calculator overview"
+description: "Inputs, outputs, and user-facing behavior"
+---
+
+## Supported use case
+
+Fueling Optimizer supports one endurance session at a time.
+
+The user enters session context, receives a deterministic recommendation, and can immediately apply that recommendation in training.
+
+## Inputs
+
+The current calculator is designed around a compact set of operational inputs:
+
+- body weight
+- session duration
+- session intensity
+- sport type
+- environmental or practical constraints when relevant
+
+These inputs are chosen because they materially affect fueling needs without turning the product into a full coaching platform.
+
+## Outputs
+
+The calculator returns targets for the full session flow:
+
+- pre-session fueling
+- during-session fueling
+- post-session fueling
+
+Recommendations are expressed in concrete units:
+
+- carbohydrates in `g`
+- fluids in `ml`
+- sodium or related electrolyte guidance in `mg`
+
+## UX principle
+
+Each output should be easy to execute in the real world. The recommendation is not just nutritionally plausible. It also has to be practical enough to use before a ride, during a long run, or immediately after a hard session.
+
+## Product boundary
+
+The current scope is intentionally narrow.
+
+<Warning>
+  Do not frame the calculator as adaptive coaching, recovery treatment, or long-term nutrition planning.
+</Warning>

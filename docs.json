@@ -18,31 +18,21 @@
             "pages": [
               "index",
               "quickstart",
+              "product/calculator-overview"
+            ]
+          },
+          {
+            "group": "Methodology",
+            "pages": [
+              "product/calculation-model",
+              "product/guardrails",
+              "product/analytics"
+            ]
+          },
+          {
+            "group": "Platform",
+            "pages": [
               "development"
-            ]
-          },
-          {
-            "group": "Calculator design",
-            "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Docs authoring",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "Team tooling",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
             ]
           }
         ]
@@ -59,10 +49,9 @@
           {
             "group": "Endpoint patterns",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/endpoint/register",
+              "api-reference/endpoint/login",
+              "api-reference/endpoint/calculate"
             ]
           }
         ]
@@ -88,11 +77,12 @@
     "dark": "/logo/dark.svg",
     "href": "/"
   },
+  "openapi": "/api-reference/openapi.json",
   "navbar": {
     "links": [
       {
-        "label": "Quickstart",
-        "href": "/quickstart"
+        "label": "Methodology",
+        "href": "/product/calculation-model"
       },
       {
         "label": "API reference",
@@ -101,8 +91,8 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Open docs",
-      "href": "/quickstart"
+      "label": "Calculator docs",
+      "href": "/product/calculator-overview"
     }
   },
   "contextual": {

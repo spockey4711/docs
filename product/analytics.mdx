@@ -1,0 +1,39 @@
+---
+title: "Analytics"
+description: "How PostHog is wired across the shell and backend"
+---
+
+## Tracking model
+
+PostHog can be enabled in both the shared SPA shell and the FastAPI backend with the same project key.
+
+This gives you consistent product instrumentation across client and server boundaries without introducing a second analytics tool.
+
+## Frontend integration
+
+The web shell uses the HTML snippet integration.
+
+Use:
+
+- a proxied `api_host`
+- the PostHog EU `ui_host`
+
+This setup keeps the browser-side implementation aligned with the deployment model while still pointing the user to the correct PostHog interface.
+
+## Backend integration
+
+The FastAPI backend uses the Python `posthog` package for server-side events.
+
+The initial success events in scope are:
+
+- successful registration
+- successful login
+- successful calculation requests
+
+## Why server-side events matter
+
+Calculation requests are central product actions. Recording them on the backend gives you a more reliable success signal than relying only on client-side instrumentation.
+
+## Recommendation
+
+Keep event naming explicit and operational. Prefer event names that map directly to business actions over generic UI click events.

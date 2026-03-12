@@ -1,97 +1,64 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "Fueling Optimizer"
+description: "Deterministic fueling guidance for one endurance session"
 ---
 
-## Setting up
+Fueling Optimizer helps ambitious endurance athletes turn session inputs into concrete fueling targets in `g`, `ml`, and `mg`.
 
-Get your documentation site up and running in minutes.
+It is intentionally narrow. The product covers one training session at a time and focuses on practical, explainable recommendations before, during, and after the session.
 
 <Card
-  title="Start here"
-  icon="rocket"
+  title="Read the product snapshot"
+  icon="gauge-high"
   href="/quickstart"
   horizontal
 >
-  Follow our three step quickstart guide.
+  Start with the scope, audience, and output model.
 </Card>
 
-## Make it yours
+## What the calculator does
 
-Design a docs site that looks great and empowers your users.
+The calculator takes a constrained set of inputs and returns structured guidance you can execute during a real session.
 
 <Columns cols={2}>
   <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
+    title="Session inputs"
+    icon="sliders"
+    href="/product/calculator-overview"
   >
-    Edit your docs locally and preview them in real time.
+    Weight, duration, intensity, sport type, and practical constraints.
   </Card>
   <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
+    title="Calculation model"
+    icon="function"
+    href="/product/calculation-model"
   >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+    Rule-based logic with transparent phase-by-phase outputs.
   </Card>
   <Card
-    title="API documentation"
-    icon="terminal"
+    title="Guardrails"
+    icon="shield-check"
+    href="/product/guardrails"
+  >
+    Clear scope boundaries so the product stays precise and trustworthy.
+  </Card>
+  <Card
+    title="API reference"
+    icon="wave-pulse"
     href="/api-reference/introduction"
   >
-    Auto-generate API documentation from OpenAPI specifications.
+    Registration, login, and session fueling calculation endpoints.
   </Card>
 </Columns>
 
-## Create beautiful pages
+## Product posture
 
-Everything you need to create world-class documentation.
+Fueling Optimizer is positioned as sports science software, not an AI coach.
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+<Note>
+  Recommendations are deterministic, transparent, and intentionally free of black-box adaptation.
+</Note>
 
-## Need inspiration?
+## Instrumentation
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+PostHog can be enabled in both the shared SPA shell and the FastAPI backend using the same project key. The frontend uses the HTML snippet integration with a proxy `api_host` plus the PostHog EU `ui_host`. The backend uses the Python `posthog` package for successful registration, login, and calculation events.

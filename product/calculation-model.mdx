@@ -1,0 +1,48 @@
+---
+title: "Calculation model"
+description: "How deterministic fueling recommendations are structured"
+---
+
+## Design principle
+
+Fueling Optimizer uses rule-based logic.
+
+That means the same valid input set should always produce the same output set. This makes the product easier to test, easier to explain, and easier for athletes to trust.
+
+## Phase-based structure
+
+Recommendations are grouped into three phases:
+
+1. Before the session
+2. During the session
+3. After the session
+
+Each phase can contain carbohydrate, fluid, and sodium targets depending on the session context.
+
+## Decision inputs
+
+The rules are driven by the minimum set of variables that materially change fueling demands:
+
+- athlete body mass
+- duration of the session
+- intensity of the session
+- sport type
+- declared constraints
+
+## Why deterministic rules
+
+Deterministic logic is the right fit for the current product scope because it keeps recommendations:
+
+- explainable
+- testable
+- stable across releases
+- easier to compare against sports science guidance
+
+## What is out of scope
+
+The current model should not imply:
+
+- adaptive learning from past workouts
+- probabilistic coaching recommendations
+- hidden personalization layers
+- long-range nutrition periodization

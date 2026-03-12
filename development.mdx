@@ -1,6 +1,6 @@
 ---
-title: 'Development'
-description: 'Preview changes locally to update your docs'
+title: 'Local development'
+description: 'Run and maintain the Fueling Optimizer documentation locally'
 ---
 
 <Info>
@@ -9,7 +9,7 @@ description: 'Preview changes locally to update your docs'
   - A docs repository with a `docs.json` file
 </Info>
 
-Follow these steps to install and run Mintlify on your operating system.
+Follow these steps to run the Fueling Optimizer docs locally.
 
 <Steps>
 <Step title="Install the Mintlify CLI">
@@ -32,6 +32,10 @@ A local preview of your documentation will be available at `http://localhost:300
 </Step>
 </Steps>
 
+## Repository note
+
+This documentation lives in its own Git repository. The docs are related to Fueling Optimizer, but they are versioned separately from the application repository.
+
 ## Custom ports
 
 By default, Mintlify uses port 3000. You can customize the port Mintlify runs on by using the `--port` flag. For example, to run Mintlify on port 3333, use this command:
@@ -46,12 +50,14 @@ If you attempt to run Mintlify on a port that's already in use, it will use the 
 Port 3000 is already in use. Trying 3001 instead.
 ```
 
-## Mintlify versions
+## CLI compatibility
 
-Please note that each CLI release is associated with a specific version of Mintlify. If your local preview does not align with the production version, please update the CLI:
+The local validator can be stricter than the hosted documentation examples. If a field documented on the Mintlify site fails locally in `mint dev`, prefer the locally working configuration and update the CLI before reintroducing the field.
+
+To update the CLI:
 
 ```bash
-npm mint update
+mint update
 ```
 
 ## Validating links
@@ -62,33 +68,16 @@ The CLI can assist with validating links in your documentation. To identify any 
 mint broken-links
 ```
 
-## Deployment
-
-If the deployment is successful, you should see the following:
-
-<Frame>
-  <img src="/images/checks-passed.png" alt="Screenshot of a deployment confirmation message that says All checks have passed." style={{ borderRadius: '0.5rem' }} />
-</Frame>
-
-## Code formatting
-
-We suggest using extensions on your IDE to recognize and format MDX. If you're a VSCode user, consider the [MDX VSCode extension](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx) for syntax highlighting, and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) for code formatting.
-
 ## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title='Error: Could not load the "sharp" module using the darwin-arm64 runtime'>
+  <Accordion title='Error: docs.json contains unsupported fields'>
 
-    This may be due to an outdated version of node. Try the following:
-    1. Remove the currently-installed version of the CLI: `npm remove -g mint`
-    2. Upgrade to Node v19 or higher.
-    3. Reinstall the CLI: `npm i -g mint`
+    If `mint dev` rejects a field that appears in the Mintlify docs, remove the field temporarily and verify your local CLI version with `mint --version`.
   </Accordion>
 
-  <Accordion title="Issue: Encountering an unknown error">
+  <Accordion title="Issue: Port 3000 is already in use">
   
-    Solution: Go to the root of your device and delete the `~/.mintlify` folder. Then run `mint dev` again.
+    Start the preview on a different port with `mint dev --port 3333`.
   </Accordion>
 </AccordionGroup>
-
-Curious about what changed in the latest CLI version? Check out the [CLI changelog](https://www.npmjs.com/package/mintlify?activeTab=versions).
